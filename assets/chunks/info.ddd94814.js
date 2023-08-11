@@ -1,0 +1,1 @@
+const n="_header_wrz42_1",e="_title_wrz42_15",t="_info_wrz42_21",o={header:n,title:e,info:t},i="_main_17maz_1",a={main:i},s={title:"ZengYL 的个人主页",host:"https://www.zengyulin.cn",base:"/",icon:"icon.png",feed:"feed.xml",lang:"zh-CN"};export{s as I,o as h,a as m};
