@@ -2,11 +2,19 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://www.zengyulin.cn</id>
     <title>ZengYL 的个人主页</title>
-    <updated>2023-08-11T09:35:57.414Z</updated>
+    <updated>2023-08-22T10:24:27.411Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://www.zengyulin.cn"/>
     <icon>https://www.zengyulin.cn/icon.png</icon>
     <rights>Copyright 2023 ZengYL</rights>
+    <entry>
+        <title type="html"><![CDATA[变量设计二事]]></title>
+        <id>https://www.zengyulin.cn/blog/variable.html</id>
+        <link href="https://www.zengyulin.cn/blog/variable.html"/>
+        <updated>2023-08-17T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[编程语言的变量，我认为更好的设计]]></summary>
+        <published>2023-08-17T00:00:00.000Z</published>
+    </entry>
     <entry>
         <title type="html"><![CDATA[开新主页]]></title>
         <id>https://www.zengyulin.cn/blog/open.html</id>
