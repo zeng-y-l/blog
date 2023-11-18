@@ -5,18 +5,20 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>变量设计二事 | ZengYL 的个人主页</title>
     <meta name="description" content="A VitePress site">
-    <link rel="preload stylesheet" href="/assets/style.3d37b2c2.css" as="style">
+    <meta name="generator" content="VitePress v1.0.0-rc.28">
+    <link rel="preload stylesheet" href="/assets/style.KNYWAJJm.css" as="style">
     
-    <script type="module" src="/assets/app.db34c29f.js"></script>
-    <link rel="modulepreload" href="/assets/chunks/framework.9783faf9.js">
-    <link rel="modulepreload" href="/assets/chunks/info.779ce3a2.js">
-    <link rel="modulepreload" href="/assets/chunks/utils.891d9e9c.js">
-    <link rel="modulepreload" href="/assets/blog_variable.md.245ce031.lean.js">
+    <script type="module" src="/assets/app.p1qiMkqI.js"></script>
+    <link rel="modulepreload" href="/assets/chunks/framework.tO_dys7n.js">
+    <link rel="modulepreload" href="/assets/chunks/main.module.wA1PaVjU.js">
+    <link rel="modulepreload" href="/assets/chunks/utils.c3f49hEE.js">
+    <link rel="modulepreload" href="/assets/blog_variable.md.GvKb9dmw.lean.js">
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="alternate" href="/feed.xml" type="application/atom+xml">
     <link rel="preconnect" href="https://rsms.me/">
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
-    <script id="check-dark-light">(()=>{const e=localStorage.getItem("vitepress-theme-appearance")||"auto",a=window.matchMedia("(prefers-color-scheme: dark)").matches;(!e||e==="auto"?a:e==="dark")&&document.documentElement.classList.add("dark")})();</script>
+    <script id="check-dark-mode">(()=>{const e=localStorage.getItem("vitepress-theme-appearance")||"auto",a=window.matchMedia("(prefers-color-scheme: dark)").matches;(!e||e==="auto"?a:e==="dark")&&document.documentElement.classList.add("dark")})();</script>
+    <script id="check-mac-os">document.documentElement.classList.toggle("mac",/Mac|iPhone|iPod|iPad/i.test(navigator.platform));</script>
   </head>
   <body>
     <div id="app"><!--[--><nav class="_wrapper_nh36t_1"><a href="/"><img class="_icon_nh36t_6" src="/icon.png"></a><div class="_path_nh36t_12"><!--[--><!--[--><span class="_sep_nh36t_20">/</span><a href="/blog/">blog</a><!--]--><!--]--><span class="_sep_nh36t_20">/</span><span>variable.html</span><!----></div></nav><header class="_header_wrz42_1"><h1 class="_title_wrz42_15">变量设计二事</h1><!--[--><div class="_info_wrz42_21">创建于 8/17/2023</div><!--]--><p class="_info_wrz42_21 italic">编程语言的变量，我认为更好的设计</p></header><main class="_main_felib_1"><div style="position:relative;"><div><h1>一、变量不应可变</h1><p>当前大多编程语言，变量都可变。我想，这不好。变量应当不可变。</p><h2>怎么办？</h2><p>变量不可变了，那怎么变？当然不是让全部人去用 Haskell。要的是 OCaml。</p><p>变量不可变，对象的属性依然可变啊！完全可以实现以下功能：</p><div class="language-js vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">js</span><pre class="shiki github-dark vp-code-dark"><code><span class="line"><span style="color:#F97583;">const</span><span style="color:#E1E4E8;"> </span><span style="color:#79B8FF;">a</span><span style="color:#E1E4E8;"> </span><span style="color:#F97583;">=</span><span style="color:#E1E4E8;"> </span><span style="color:#B392F0;">ref</span><span style="color:#E1E4E8;">(</span><span style="color:#79B8FF;">1</span><span style="color:#E1E4E8;">)</span></span>
@@ -52,7 +54,7 @@
 <span class="line"><span style="color:#24292E;">{</span></span>
 <span class="line"><span style="color:#24292E;">    </span><span style="color:#D73A49;">let</span><span style="color:#24292E;"> a </span><span style="color:#D73A49;">=</span><span style="color:#24292E;"> </span><span style="color:#005CC5;">3</span><span style="color:#24292E;">; </span><span style="color:#6A737D;">// 欸！这就可以了！</span></span>
 <span class="line"><span style="color:#24292E;">}</span></span></code></pre></div><p>我认为，现代的编程语言，不应如此。或者允许变量 Shadow，像 Rust 一样；或者禁止定义当前能访问到的变量，像 Zig 一样。</p><p>做到前者无技术含量，后者就可能有历史包袱。</p><p>JavaScript 可能难以做到后者。因其无法知道全局变量存在与否，需动态检查。若是运行到一半，全局环境被改了，于是莫名其妙地显出重定义错误，岂不怪哉？！</p><p>不知 C 是否能做到后者？</p></div></div></main><!--]--></div>
-    <script>window.__VP_HASH_MAP__=JSON.parse("{\"blog_rectarea.md\":\"f76461e1\",\"about.md\":\"0523c0b5\",\"blog_cssgrid.md\":\"5a996fae\",\"blog_cssfont.md\":\"729e8b97\",\"blog_index.md\":\"3398c1d4\",\"blog_jqunwrapinner.md\":\"5bf21251\",\"blog_jsforof.md\":\"6adddfb6\",\"blog_jsonstringify.md\":\"ccf7ada1\",\"blog_variable.md\":\"245ce031\",\"index.md\":\"b9bc851c\",\"project_index.md\":\"be4cc4e2\",\"project_schdsc_index.md\":\"982d983d\",\"blog_open.md\":\"86c46129\",\"project_schdsc_wiki.md\":\"43da7cb8\",\"project_schdsc_poster_0-9-0.md\":\"00a56b59\",\"project_scmidi.md\":\"d48c5923\",\"blog_curry.md\":\"4cbd7438\",\"project_schdsc_updatelog.md\":\"400dcfb5\",\"blog_rustleetcode65.md\":\"00b3406b\",\"project_schdsc_introduction.md\":\"d69d3170\",\"blog_userliteral.md\":\"2cf27eb9\",\"blog_xizaoguilun.md\":\"7292c68c\"}");window.__VP_SITE_DATA__=JSON.parse("{\"lang\":\"zh-CN\",\"dir\":\"ltr\",\"title\":\"ZengYL 的个人主页\",\"description\":\"A VitePress site\",\"base\":\"/\",\"head\":[],\"appearance\":true,\"themeConfig\":{},\"locales\":{},\"scrollOffset\":90,\"cleanUrls\":false}");</script>
+    <script>window.__VP_HASH_MAP__=JSON.parse("{\"project_schdsc_updatelog.md\":\"k6eJZhe7\",\"blog_jqunwrapinner.md\":\"YXkXQaO4\",\"blog_justnotepad.md\":\"6WxHG538\",\"blog_jsforof.md\":\"Y_Qvuxay\",\"project_schdsc_index.md\":\"bQBHjnDN\",\"blog_cssfont.md\":\"U2LKj2lo\",\"blog_userliteral.md\":\"NLLOX5vR\",\"project_schdsc_poster_0-9-0.md\":\"JamZu80f\",\"project_index.md\":\"zPqvJ9G2\",\"index.md\":\"LXgoSgHo\",\"project_schdsc_introduction.md\":\"zIVoOxeg\",\"blog_cssgrid.md\":\"SGQDgjhY\",\"project_schdsc_wiki.md\":\"r0duZ2Wl\",\"project_scmidi.md\":\"bMKWUioM\",\"blog_rectarea.md\":\"rEuepzz3\",\"blog_curry.md\":\"d8DIS_Nv\",\"blog_open.md\":\"FBBvGTOY\",\"blog_variable.md\":\"GvKb9dmw\",\"about.md\":\"hGX5TCG0\",\"blog_index.md\":\"7Hs1Pk6I\",\"blog_xizaoguilun.md\":\"gnXGos9N\",\"blog_jsonstringify.md\":\"nQ67zvhd\",\"blog_rustleetcode65.md\":\"mboRSS4c\"}");window.__VP_SITE_DATA__=JSON.parse("{\"lang\":\"zh-CN\",\"dir\":\"ltr\",\"title\":\"ZengYL 的个人主页\",\"description\":\"A VitePress site\",\"base\":\"/\",\"head\":[],\"router\":{\"prefetchLinks\":true},\"appearance\":true,\"themeConfig\":{},\"locales\":{},\"scrollOffset\":90,\"cleanUrls\":false}");</script>
     
   </body>
 </html>

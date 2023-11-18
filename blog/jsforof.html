@@ -5,18 +5,20 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>JS 的 for..of | ZengYL 的个人主页</title>
     <meta name="description" content="A VitePress site">
-    <link rel="preload stylesheet" href="/assets/style.3d37b2c2.css" as="style">
+    <meta name="generator" content="VitePress v1.0.0-rc.28">
+    <link rel="preload stylesheet" href="/assets/style.KNYWAJJm.css" as="style">
     
-    <script type="module" src="/assets/app.db34c29f.js"></script>
-    <link rel="modulepreload" href="/assets/chunks/framework.9783faf9.js">
-    <link rel="modulepreload" href="/assets/chunks/info.779ce3a2.js">
-    <link rel="modulepreload" href="/assets/chunks/utils.891d9e9c.js">
-    <link rel="modulepreload" href="/assets/blog_jsforof.md.6adddfb6.lean.js">
+    <script type="module" src="/assets/app.p1qiMkqI.js"></script>
+    <link rel="modulepreload" href="/assets/chunks/framework.tO_dys7n.js">
+    <link rel="modulepreload" href="/assets/chunks/main.module.wA1PaVjU.js">
+    <link rel="modulepreload" href="/assets/chunks/utils.c3f49hEE.js">
+    <link rel="modulepreload" href="/assets/blog_jsforof.md.Y_Qvuxay.lean.js">
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="alternate" href="/feed.xml" type="application/atom+xml">
     <link rel="preconnect" href="https://rsms.me/">
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
-    <script id="check-dark-light">(()=>{const e=localStorage.getItem("vitepress-theme-appearance")||"auto",a=window.matchMedia("(prefers-color-scheme: dark)").matches;(!e||e==="auto"?a:e==="dark")&&document.documentElement.classList.add("dark")})();</script>
+    <script id="check-dark-mode">(()=>{const e=localStorage.getItem("vitepress-theme-appearance")||"auto",a=window.matchMedia("(prefers-color-scheme: dark)").matches;(!e||e==="auto"?a:e==="dark")&&document.documentElement.classList.add("dark")})();</script>
+    <script id="check-mac-os">document.documentElement.classList.toggle("mac",/Mac|iPhone|iPod|iPad/i.test(navigator.platform));</script>
   </head>
   <body>
     <div id="app"><!--[--><nav class="_wrapper_nh36t_1"><a href="/"><img class="_icon_nh36t_6" src="/icon.png"></a><div class="_path_nh36t_12"><!--[--><!--[--><span class="_sep_nh36t_20">/</span><a href="/blog/">blog</a><!--]--><!--]--><span class="_sep_nh36t_20">/</span><span>jsforof.html</span><!----></div></nav><header class="_header_wrz42_1"><h1 class="_title_wrz42_15">JS 的 for..of</h1><!--[--><div class="_info_wrz42_21">创建于 7/1/2023</div><!--]--><p class="_info_wrz42_21 italic">说说 JS 的 for..of（这是一篇旧文章，日期是后来的）</p></header><main class="_main_felib_1"><div style="position:relative;"><div><p>本文将以我自己的理解方式，说说<code>for..of</code>到底是个啥（顺便地讲迭代器）。</p><p>本人太烂，有错误敬请指出。</p><hr><h1>引言</h1><p>从对Array的使用中可以发现，<code>for..of</code>类似如下：</p><div class="language-js vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">js</span><pre class="shiki github-dark vp-code-dark"><code><span class="line"><span style="color:#79B8FF;">Array</span><span style="color:#E1E4E8;">.</span><span style="color:#79B8FF;">prototype</span><span style="color:#E1E4E8;">.</span><span style="color:#B392F0;">abcd</span><span style="color:#E1E4E8;"> </span><span style="color:#F97583;">=</span><span style="color:#E1E4E8;"> </span><span style="color:#F97583;">function</span><span style="color:#E1E4E8;">(){};</span></span>
@@ -192,7 +194,7 @@
 <span class="line"><span style="color:#24292E;">    </span><span style="color:#D73A49;">if</span><span style="color:#24292E;">(valObj.done) </span><span style="color:#D73A49;">break</span><span style="color:#24292E;">;</span></span>
 <span class="line"><span style="color:#24292E;">    console.</span><span style="color:#6F42C1;">log</span><span style="color:#24292E;">(valObj.value);</span></span>
 <span class="line"><span style="color:#24292E;">}</span></span></code></pre></div><blockquote><p>生成器函数生成的迭代器的<code>next</code>函数可以传入参数。<br> 传入的参数将被作为<strong>上一个</strong><code>yield</code>语句的值。</p></blockquote><p>还记得前面那个“函数”的比喻吗？<code>next</code>方法传入的参数就是<code>yield</code>“函数”的“返回值”。</p><p>也可以将<code>yield</code>想象成<code>prompt</code>函数，生成器函数想象成程序，使用迭代器者就是你。<br> 第一次调用<code>next</code>，程序开始运行，你等待；<br> 程序遇到<code>yield</code>，告知你值。程序阻塞；<br> 你拿值进行计算完毕，准备再次调用<code>next</code>，可以输入一个值（<code>next</code>方法的参数）；<br> 程序用<code>prompt</code>的返回值（<code>yield</code>语句的值）收到你的输入，继续运行。</p><p>如果还是不懂，那也没必要懂了，因为和<code>for..of</code>没啥关系，呵呵。</p></div></div></main><!--]--></div>
-    <script>window.__VP_HASH_MAP__=JSON.parse("{\"blog_rectarea.md\":\"f76461e1\",\"about.md\":\"0523c0b5\",\"blog_cssgrid.md\":\"5a996fae\",\"blog_cssfont.md\":\"729e8b97\",\"blog_index.md\":\"3398c1d4\",\"blog_jqunwrapinner.md\":\"5bf21251\",\"blog_jsforof.md\":\"6adddfb6\",\"blog_jsonstringify.md\":\"ccf7ada1\",\"blog_variable.md\":\"245ce031\",\"index.md\":\"b9bc851c\",\"project_index.md\":\"be4cc4e2\",\"project_schdsc_index.md\":\"982d983d\",\"blog_open.md\":\"86c46129\",\"project_schdsc_wiki.md\":\"43da7cb8\",\"project_schdsc_poster_0-9-0.md\":\"00a56b59\",\"project_scmidi.md\":\"d48c5923\",\"blog_curry.md\":\"4cbd7438\",\"project_schdsc_updatelog.md\":\"400dcfb5\",\"blog_rustleetcode65.md\":\"00b3406b\",\"project_schdsc_introduction.md\":\"d69d3170\",\"blog_userliteral.md\":\"2cf27eb9\",\"blog_xizaoguilun.md\":\"7292c68c\"}");window.__VP_SITE_DATA__=JSON.parse("{\"lang\":\"zh-CN\",\"dir\":\"ltr\",\"title\":\"ZengYL 的个人主页\",\"description\":\"A VitePress site\",\"base\":\"/\",\"head\":[],\"appearance\":true,\"themeConfig\":{},\"locales\":{},\"scrollOffset\":90,\"cleanUrls\":false}");</script>
+    <script>window.__VP_HASH_MAP__=JSON.parse("{\"project_schdsc_updatelog.md\":\"k6eJZhe7\",\"blog_jqunwrapinner.md\":\"YXkXQaO4\",\"blog_justnotepad.md\":\"6WxHG538\",\"blog_jsforof.md\":\"Y_Qvuxay\",\"project_schdsc_index.md\":\"bQBHjnDN\",\"blog_cssfont.md\":\"U2LKj2lo\",\"blog_userliteral.md\":\"NLLOX5vR\",\"project_schdsc_poster_0-9-0.md\":\"JamZu80f\",\"project_index.md\":\"zPqvJ9G2\",\"index.md\":\"LXgoSgHo\",\"project_schdsc_introduction.md\":\"zIVoOxeg\",\"blog_cssgrid.md\":\"SGQDgjhY\",\"project_schdsc_wiki.md\":\"r0duZ2Wl\",\"project_scmidi.md\":\"bMKWUioM\",\"blog_rectarea.md\":\"rEuepzz3\",\"blog_curry.md\":\"d8DIS_Nv\",\"blog_open.md\":\"FBBvGTOY\",\"blog_variable.md\":\"GvKb9dmw\",\"about.md\":\"hGX5TCG0\",\"blog_index.md\":\"7Hs1Pk6I\",\"blog_xizaoguilun.md\":\"gnXGos9N\",\"blog_jsonstringify.md\":\"nQ67zvhd\",\"blog_rustleetcode65.md\":\"mboRSS4c\"}");window.__VP_SITE_DATA__=JSON.parse("{\"lang\":\"zh-CN\",\"dir\":\"ltr\",\"title\":\"ZengYL 的个人主页\",\"description\":\"A VitePress site\",\"base\":\"/\",\"head\":[],\"router\":{\"prefetchLinks\":true},\"appearance\":true,\"themeConfig\":{},\"locales\":{},\"scrollOffset\":90,\"cleanUrls\":false}");</script>
     
   </body>
 </html>
