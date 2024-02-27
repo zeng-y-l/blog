@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh-CN" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>编写「集」 | ZengYL 的个人主页</title>
+    <meta name="description" content="A VitePress site">
+    <meta name="generator" content="VitePress v1.0.0-rc.28">
+    <link rel="preload stylesheet" href="/assets/style.Ppr7V17M.css" as="style">
+    
+    <script type="module" src="/assets/app.5Hd-ioZC.js"></script>
+    <link rel="modulepreload" href="/assets/chunks/framework.48Co6iSO.js">
+    <link rel="modulepreload" href="/assets/chunks/main.module.Mi1Y6S1n.js">
+    <link rel="modulepreload" href="/assets/chunks/utils.c3f49hEE.js">
+    <link rel="modulepreload" href="/assets/blog_ji.md.V63bPBiQ.lean.js">
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="alternate" href="/feed.xml" type="application/atom+xml">
+    <link rel="preconnect" href="https://rsms.me/">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <script id="check-dark-mode">(()=>{const e=localStorage.getItem("vitepress-theme-appearance")||"auto",a=window.matchMedia("(prefers-color-scheme: dark)").matches;(!e||e==="auto"?a:e==="dark")&&document.documentElement.classList.add("dark")})();</script>
+    <script id="check-mac-os">document.documentElement.classList.toggle("mac",/Mac|iPhone|iPod|iPad/i.test(navigator.platform));</script>
+  </head>
+  <body>
+    <div id="app"><!--[--><nav class="_wrapper_nh36t_1"><a href="/"><img class="_icon_nh36t_6" src="/icon.png"></a><div class="_path_nh36t_12"><!--[--><!--[--><span class="_sep_nh36t_20">/</span><a href="/blog/">blog</a><!--]--><!--]--><span class="_sep_nh36t_20">/</span><span>ji.html</span><!----></div></nav><header class="_header_xfp05_1"><h1 class="_title_xfp05_14">编写「集」</h1><!--[--><div class="_info_xfp05_17">创建于 2/27/2024</div><!--]--><p class="_info_xfp05_17 italic">开发中的技术要点</p></header><main class="_main_felib_1"><div style="position:relative;"><div><p>近日，我发布了<a href="https://zeng-y-l.github.io/ji/" target="_blank" rel="noreferrer">「集」游戏</a>，及其<a href="https://gitee.com/Zeng_YL/ji-gui" target="_blank" rel="noreferrer">界面源码</a>与<a href="https://gitee.com/Zeng_YL/ji-train" target="_blank" rel="noreferrer">训练源码</a>。本文简述其技术要点。</p><h2>训练</h2><p>使用 Rust 语言。</p><h3>智能</h3><p>智能非常简单：随机出。当然，不是完全随机。</p><p>首先，要根据权重随机出。权重根据我方和对方现有的集的数量决定。例如，如果我方没有集而对方有两个，则集的权重比较大。具体的权重，就是算法的参数，也是优化的目标。</p><p>其次，提前剔除<strong>一定不好</strong>的技能。例如，若双方都没有集，则不应出小防；若我方有五个集，则不应出集。以下是定义。<br> 某技能甲，对于任意技能乙，在对方所有技能下甲都不比乙<strong>应对更好</strong>，且对方出某个技能时乙比甲<strong>应对更好</strong>，则技能甲<strong>一定不好</strong>。<br> 技能甲和乙分别对战对方技能。甲赢乙输则甲比乙<strong>应对更好</strong>，同赢或同输则无好坏之分。若都不分输赢，则花费少者<strong>应对更好</strong>，花费一样则无好坏之分。</p><h3>智能实现</h3><p>权重使用简单的 <code>u8</code> 数组，附带一个映射用于查询数组索引。这使之可以非常方便地存进文件，无需序列化。</p><p>若技能出不了（集不够），或一定不好，则不存储。节省空间。</p><p>我规定，在我方和对方的集的数量一定的情况下，所有技能的权重之和为 255。于是，可以少存一个权重，加起来用 255 减它就是。</p><p>那个映射目前用 <code>EnumMap</code> 实现。我正在写一个库，准备替换掉。本应使用常量，遗憾，不支持。</p><h3>技能实现</h3><p>技能是写在代码中的，不可动态配置。但是用 trait 实现，可编译时配置。</p><p>对于技能胜负判定，我本想搞缓存。结果一看，发现直接用数组 <code>contains</code> 方法居然更快一点点。应该是编译器优化之故，真神奇。</p><p>技能的名字，十分 hack 地用了 <code>Debug</code>，方便直接 derive。</p><h3>遗传算法</h3><p>与<a href="https://gitee.com/Zeng_YL/ten-steps-10000-degrees/" target="_blank" rel="noreferrer">十步万度</a>的类似，加入混合而不只是变异。未经优化，十分朴实。懒得优化，能用就行。</p><h2>界面</h2><p>使用 Solid.js 框架，Vite 构建。</p><h3>字体</h3><p>字体占空间大。发现一个库，<a href="https://www.npmjs.com/package/font-slice" target="_blank" rel="noreferrer">font-slice</a>，类似谷歌的字体切片，看着不错，用之。</p><h3>竖排</h3><p>不少地滥用了 <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/writing-mode" target="_blank" rel="noreferrer"><code>writing-mode</code></a> 做临时的竖排。Firefox 支持不佳，我只好手动设置尺寸。</p><h3>卡片</h3><p>平时只显示名字，需要时升起，全部显示。如何做到？</p><p>我令卡片的顶边为屏幕底部，完全使用 <code>transform</code> 控制位置。我写死名字的高度，平时上移名字的高度，升起时上移 100%。</p></div></div></main><!--]--></div>
+    <script>window.__VP_HASH_MAP__=JSON.parse("{\"blog_rustlink.md\":\"xk-fjbME\",\"blog_cssfont.md\":\"nKl9Wtej\",\"about.md\":\"W5-7ZoM5\",\"blog_open.md\":\"64FxDpNt\",\"blog_rectarea.md\":\"seFfNY7U\",\"blog_rustleetcode65.md\":\"J1F4XN_9\",\"blog_reflect.md\":\"_Q1iV2ZP\",\"blog_justnotepad.md\":\"UFFCwfLI\",\"blog_cssgrid.md\":\"DY5N8mEc\",\"blog_jqunwrapinner.md\":\"C8uB0Iwj\",\"blog_jsonstringify.md\":\"wtd-bgL2\",\"blog_ji.md\":\"V63bPBiQ\",\"blog_wechatlink.md\":\"wdnX8CwV\",\"project_index.md\":\"Tw0Q6-ZF\",\"project_schdsc_index.md\":\"yoODS0jr\",\"project_scmidi.md\":\"v8krNr4G\",\"project_schdsc_updatelog.md\":\"cGLQk80Q\",\"blog_fenix.md\":\"9AHl7unF\",\"project_schdsc_wiki.md\":\"hJHo9o1y\",\"project_schdsc_poster_0-9-0.md\":\"yLuR5tWH\",\"blog_xizaoguilun.md\":\"l6Nvj3m8\",\"blog_jsforof.md\":\"t5Cjh8Yg\",\"blog_unicode.md\":\"uQTzxIXe\",\"blog_index.md\":\"YAubxg0I\",\"blog_userliteral.md\":\"Llh7z5R1\",\"project_schdsc_introduction.md\":\"00BES_pP\",\"blog_curry.md\":\"AT5f_s7y\",\"blog_variable.md\":\"CiHTzMkD\",\"index.md\":\"MxsRVgdD\"}");window.__VP_SITE_DATA__=JSON.parse("{\"lang\":\"zh-CN\",\"dir\":\"ltr\",\"title\":\"ZengYL 的个人主页\",\"description\":\"A VitePress site\",\"base\":\"/\",\"head\":[],\"router\":{\"prefetchLinks\":true},\"appearance\":true,\"themeConfig\":{},\"locales\":{},\"scrollOffset\":90,\"cleanUrls\":false}");</script>
+    
+  </body>
+</html>

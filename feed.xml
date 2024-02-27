@@ -2,11 +2,19 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zeng-y-l.github.io</id>
     <title>ZengYL 的个人主页</title>
-    <updated>2024-02-25T13:34:46.045Z</updated>
+    <updated>2024-02-27T17:34:27.831Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zeng-y-l.github.io"/>
     <icon>/icon.png</icon>
     <rights>Copyright 2023 ZengYL</rights>
+    <entry>
+        <title type="html"><![CDATA[编写「集」]]></title>
+        <id>/blog/ji.html</id>
+        <link href="/blog/ji.html"/>
+        <updated>2024-02-27T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[开发中的技术要点]]></summary>
+        <published>2024-02-27T00:00:00.000Z</published>
+    </entry>
     <entry>
         <title type="html"><![CDATA[漫谈反射]]></title>
         <id>/blog/reflect.html</id>
