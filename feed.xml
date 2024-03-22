@@ -2,11 +2,19 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zeng-y-l.github.io</id>
     <title>ZengYL 的个人主页</title>
-    <updated>2024-03-07T16:26:40.798Z</updated>
+    <updated>2024-03-22T22:43:30.254Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zeng-y-l.github.io"/>
     <icon>/icon.png</icon>
     <rights>Copyright 2023 ZengYL</rights>
+    <entry>
+        <title type="html"><![CDATA[C 实现 try]]></title>
+        <id>/blog/tryinc.html</id>
+        <link href="/blog/tryinc.html"/>
+        <updated>2024-03-23T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[longjmp 实现异常处理]]></summary>
+        <published>2024-03-23T00:00:00.000Z</published>
+    </entry>
     <entry>
         <title type="html"><![CDATA[前端生成视频]]></title>
         <id>/blog/webcodecs.html</id>

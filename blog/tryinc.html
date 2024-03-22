@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>C 实现 try | ZengYL 的个人主页</title>
+    <meta name="description" content="A VitePress site">
+    <meta name="generator" content="VitePress v1.0.0-rc.28">
+    <link rel="preload stylesheet" href="/assets/style.Ppr7V17M.css" as="style">
+    
+    <script type="module" src="/assets/app.5Hd-ioZC.js"></script>
+    <link rel="modulepreload" href="/assets/chunks/framework.48Co6iSO.js">
+    <link rel="modulepreload" href="/assets/chunks/main.module.Mi1Y6S1n.js">
+    <link rel="modulepreload" href="/assets/chunks/utils.c3f49hEE.js">
+    <link rel="modulepreload" href="/assets/blog_tryinc.md.Xb1In5kQ.lean.js">
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="alternate" href="/feed.xml" type="application/atom+xml">
+    <link rel="preconnect" href="https://rsms.me/">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <script id="check-dark-mode">(()=>{const e=localStorage.getItem("vitepress-theme-appearance")||"auto",a=window.matchMedia("(prefers-color-scheme: dark)").matches;(!e||e==="auto"?a:e==="dark")&&document.documentElement.classList.add("dark")})();</script>
+    <script id="check-mac-os">document.documentElement.classList.toggle("mac",/Mac|iPhone|iPod|iPad/i.test(navigator.platform));</script>
+  </head>
+  <body>
+    <div id="app"><!--[--><nav class="_wrapper_nh36t_1"><a href="/"><img class="_icon_nh36t_6" src="/icon.png"></a><div class="_path_nh36t_12"><!--[--><!--[--><span class="_sep_nh36t_20">/</span><a href="/blog/">blog</a><!--]--><!--]--><span class="_sep_nh36t_20">/</span><span>tryinc.html</span><!----></div></nav><header class="_header_xfp05_1"><h1 class="_title_xfp05_14">C 实现 try</h1><!--[--><div class="_info_xfp05_17">创建于 3/23/2024</div><!--]--><p class="_info_xfp05_17 italic">longjmp 实现异常处理</p></header><main class="_main_felib_1"><div style="position:relative;"><div><h1>C 实现 try</h1><p>随手用 C 写了个异常处理的小玩意儿。使用 <code>setjmp</code> <code>longjmp</code>， 支持嵌套 try、重复抛出。</p><p><code>exn.h</code>：</p><div class="language-c vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">c</span><pre class="shiki github-dark vp-code-dark"><code><span class="line"><span style="color:#F97583;">#ifndef</span><span style="color:#E1E4E8;"> </span><span style="color:#B392F0;">EXN_H</span></span>
+<span class="line"><span style="color:#F97583;">#define</span><span style="color:#E1E4E8;"> </span><span style="color:#B392F0;">EXN_H</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583;">#include</span><span style="color:#E1E4E8;"> </span><span style="color:#9ECBFF;">&lt;setjmp.h&gt;</span></span>
+<span class="line"><span style="color:#F97583;">#include</span><span style="color:#E1E4E8;"> </span><span style="color:#9ECBFF;">&lt;stdbool.h&gt;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583;">typedef</span><span style="color:#E1E4E8;"> </span><span style="color:#F97583;">struct</span><span style="color:#E1E4E8;"> {</span></span>
+<span class="line"><span style="color:#E1E4E8;">  </span><span style="color:#F97583;">unsigned</span><span style="color:#E1E4E8;"> </span><span style="color:#F97583;">int</span><span style="color:#E1E4E8;"> id;</span></span>
+<span class="line"><span style="color:#E1E4E8;">  </span><span style="color:#F97583;">const</span><span style="color:#E1E4E8;"> </span><span style="color:#F97583;">char</span><span style="color:#E1E4E8;"> </span><span style="color:#F97583;">*</span><span style="color:#E1E4E8;">name;</span></span>
+<span class="line"><span style="color:#E1E4E8;">} </span><span style="color:#79B8FF;">exn_t</span><span style="color:#E1E4E8;">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583;">typedef</span><span style="color:#E1E4E8;"> </span><span style="color:#F97583;">struct</span><span style="color:#E1E4E8;"> {</span></span>
+<span class="line"><span style="color:#E1E4E8;">  </span><span style="color:#F97583;">bool</span><span style="color:#E1E4E8;"> limited;</span></span>
+<span class="line"><span style="color:#E1E4E8;">  </span><span style="color:#F97583;">union</span><span style="color:#E1E4E8;"> {</span></span>
+<span class="line"><span style="color:#E1E4E8;">    jmp_buf </span><span style="color:#F97583;">*</span><span style="color:#E1E4E8;">buf;</span></span>
+<span class="line"><span style="color:#E1E4E8;">    </span><span style="color:#79B8FF;">exn_t</span><span style="color:#E1E4E8;"> exn;</span></span>
+<span class="line"><span style="color:#E1E4E8;">  } data;</span></span>
+<span class="line"><span style="color:#E1E4E8;">} exn_state;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583;">extern</span><span style="color:#E1E4E8;"> exn_state exn_state_global;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583;">void</span><span style="color:#E1E4E8;"> </span><span style="color:#B392F0;">throw</span><span style="color:#E1E4E8;">(</span><span style="color:#79B8FF;">exn_t</span><span style="color:#E1E4E8;"> </span><span style="color:#FFAB70;">exn</span><span style="color:#E1E4E8;">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583;">#define</span><span style="color:#E1E4E8;"> </span><span style="color:#B392F0;">TRY</span><span style="color:#E1E4E8;">                                                                    </span><span style="color:#79B8FF;">\</span></span>
+<span class="line"><span style="color:#E1E4E8;">  {                                                                            </span><span style="color:#79B8FF;">\</span></span>
+<span class="line"><span style="color:#E1E4E8;">    exn_state exn_state_local </span><span style="color:#F97583;">=</span><span style="color:#E1E4E8;"> exn_state_global;                              </span><span style="color:#79B8FF;">\</span></span>
+<span class="line"><span style="color:#E1E4E8;">    exn_state_global.limited </span><span style="color:#F97583;">=</span><span style="color:#E1E4E8;"> </span><span style="color:#79B8FF;">true</span><span style="color:#E1E4E8;">;                                           </span><span style="color:#79B8FF;">\</span></span>
+<span class="line"><span style="color:#E1E4E8;">    jmp_buf this_jmp_buf;                                                      </span><span style="color:#79B8FF;">\</span></span>
+<span class="line"><span style="color:#E1E4E8;">    </span><span style="color:#F97583;">if</span><span style="color:#E1E4E8;"> (</span><span style="color:#F97583;">!</span><span style="color:#B392F0;">setjmp</span><span style="color:#E1E4E8;">(this_jmp_buf)) {                                               </span><span style="color:#79B8FF;">\</span></span>
+<span class="line"><span style="color:#E1E4E8;">      exn_state_global.data.buf </span><span style="color:#F97583;">=</span><span style="color:#E1E4E8;"> </span><span style="color:#F97583;">&amp;</span><span style="color:#E1E4E8;">this_jmp_buf;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583;">#define</span><span style="color:#E1E4E8;"> </span><span style="color:#B392F0;">CATCH</span><span style="color:#E1E4E8;">(</span><span style="color:#FFAB70;">e</span><span style="color:#E1E4E8;">)                                                               </span><span style="color:#79B8FF;">\</span></span>
+<span class="line"><span style="color:#E1E4E8;">      exn_state_global </span><span style="color:#F97583;">=</span><span style="color:#E1E4E8;"> exn_state_local;                                      </span><span style="color:#79B8FF;">\</span></span>
+<span class="line"><span style="color:#E1E4E8;">    } </span><span style="color:#F97583;">else</span><span style="color:#E1E4E8;"> {                                                                   </span><span style="color:#79B8FF;">\</span></span>
+<span class="line"><span style="color:#E1E4E8;">      </span><span style="color:#79B8FF;">exn_t</span><span style="color:#E1E4E8;"> e </span><span style="color:#F97583;">=</span><span style="color:#E1E4E8;"> exn_state_global.data.exn;                                     </span><span style="color:#79B8FF;">\</span></span>
+<span class="line"><span style="color:#E1E4E8;">      exn_state_global </span><span style="color:#F97583;">=</span><span style="color:#E1E4E8;"> exn_state_local;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583;">#define</span><span style="color:#E1E4E8;"> </span><span style="color:#B392F0;">END_TRY</span><span style="color:#E1E4E8;">                                                                </span><span style="color:#79B8FF;">\</span></span>
+<span class="line"><span style="color:#E1E4E8;">    }                                                                          </span><span style="color:#79B8FF;">\</span></span>
+<span class="line"><span style="color:#E1E4E8;">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583;">#endif</span></span></code></pre><pre class="shiki github-light vp-code-light"><code><span class="line"><span style="color:#D73A49;">#ifndef</span><span style="color:#24292E;"> </span><span style="color:#6F42C1;">EXN_H</span></span>
+<span class="line"><span style="color:#D73A49;">#define</span><span style="color:#24292E;"> </span><span style="color:#6F42C1;">EXN_H</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;">#include</span><span style="color:#24292E;"> </span><span style="color:#032F62;">&lt;setjmp.h&gt;</span></span>
+<span class="line"><span style="color:#D73A49;">#include</span><span style="color:#24292E;"> </span><span style="color:#032F62;">&lt;stdbool.h&gt;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;">typedef</span><span style="color:#24292E;"> </span><span style="color:#D73A49;">struct</span><span style="color:#24292E;"> {</span></span>
+<span class="line"><span style="color:#24292E;">  </span><span style="color:#D73A49;">unsigned</span><span style="color:#24292E;"> </span><span style="color:#D73A49;">int</span><span style="color:#24292E;"> id;</span></span>
+<span class="line"><span style="color:#24292E;">  </span><span style="color:#D73A49;">const</span><span style="color:#24292E;"> </span><span style="color:#D73A49;">char</span><span style="color:#24292E;"> </span><span style="color:#D73A49;">*</span><span style="color:#24292E;">name;</span></span>
+<span class="line"><span style="color:#24292E;">} </span><span style="color:#005CC5;">exn_t</span><span style="color:#24292E;">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;">typedef</span><span style="color:#24292E;"> </span><span style="color:#D73A49;">struct</span><span style="color:#24292E;"> {</span></span>
+<span class="line"><span style="color:#24292E;">  </span><span style="color:#D73A49;">bool</span><span style="color:#24292E;"> limited;</span></span>
+<span class="line"><span style="color:#24292E;">  </span><span style="color:#D73A49;">union</span><span style="color:#24292E;"> {</span></span>
+<span class="line"><span style="color:#24292E;">    jmp_buf </span><span style="color:#D73A49;">*</span><span style="color:#24292E;">buf;</span></span>
+<span class="line"><span style="color:#24292E;">    </span><span style="color:#005CC5;">exn_t</span><span style="color:#24292E;"> exn;</span></span>
+<span class="line"><span style="color:#24292E;">  } data;</span></span>
+<span class="line"><span style="color:#24292E;">} exn_state;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;">extern</span><span style="color:#24292E;"> exn_state exn_state_global;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;">void</span><span style="color:#24292E;"> </span><span style="color:#6F42C1;">throw</span><span style="color:#24292E;">(</span><span style="color:#005CC5;">exn_t</span><span style="color:#24292E;"> </span><span style="color:#E36209;">exn</span><span style="color:#24292E;">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;">#define</span><span style="color:#24292E;"> </span><span style="color:#6F42C1;">TRY</span><span style="color:#24292E;">                                                                    </span><span style="color:#005CC5;">\</span></span>
+<span class="line"><span style="color:#24292E;">  {                                                                            </span><span style="color:#005CC5;">\</span></span>
+<span class="line"><span style="color:#24292E;">    exn_state exn_state_local </span><span style="color:#D73A49;">=</span><span style="color:#24292E;"> exn_state_global;                              </span><span style="color:#005CC5;">\</span></span>
+<span class="line"><span style="color:#24292E;">    exn_state_global.limited </span><span style="color:#D73A49;">=</span><span style="color:#24292E;"> </span><span style="color:#005CC5;">true</span><span style="color:#24292E;">;                                           </span><span style="color:#005CC5;">\</span></span>
+<span class="line"><span style="color:#24292E;">    jmp_buf this_jmp_buf;                                                      </span><span style="color:#005CC5;">\</span></span>
+<span class="line"><span style="color:#24292E;">    </span><span style="color:#D73A49;">if</span><span style="color:#24292E;"> (</span><span style="color:#D73A49;">!</span><span style="color:#6F42C1;">setjmp</span><span style="color:#24292E;">(this_jmp_buf)) {                                               </span><span style="color:#005CC5;">\</span></span>
+<span class="line"><span style="color:#24292E;">      exn_state_global.data.buf </span><span style="color:#D73A49;">=</span><span style="color:#24292E;"> </span><span style="color:#D73A49;">&amp;</span><span style="color:#24292E;">this_jmp_buf;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;">#define</span><span style="color:#24292E;"> </span><span style="color:#6F42C1;">CATCH</span><span style="color:#24292E;">(</span><span style="color:#E36209;">e</span><span style="color:#24292E;">)                                                               </span><span style="color:#005CC5;">\</span></span>
+<span class="line"><span style="color:#24292E;">      exn_state_global </span><span style="color:#D73A49;">=</span><span style="color:#24292E;"> exn_state_local;                                      </span><span style="color:#005CC5;">\</span></span>
+<span class="line"><span style="color:#24292E;">    } </span><span style="color:#D73A49;">else</span><span style="color:#24292E;"> {                                                                   </span><span style="color:#005CC5;">\</span></span>
+<span class="line"><span style="color:#24292E;">      </span><span style="color:#005CC5;">exn_t</span><span style="color:#24292E;"> e </span><span style="color:#D73A49;">=</span><span style="color:#24292E;"> exn_state_global.data.exn;                                     </span><span style="color:#005CC5;">\</span></span>
+<span class="line"><span style="color:#24292E;">      exn_state_global </span><span style="color:#D73A49;">=</span><span style="color:#24292E;"> exn_state_local;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;">#define</span><span style="color:#24292E;"> </span><span style="color:#6F42C1;">END_TRY</span><span style="color:#24292E;">                                                                </span><span style="color:#005CC5;">\</span></span>
+<span class="line"><span style="color:#24292E;">    }                                                                          </span><span style="color:#005CC5;">\</span></span>
+<span class="line"><span style="color:#24292E;">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;">#endif</span></span></code></pre></div><p><code>exn.c</code>：</p><div class="language-c vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">c</span><pre class="shiki github-dark vp-code-dark"><code><span class="line"><span style="color:#F97583;">#include</span><span style="color:#E1E4E8;"> </span><span style="color:#9ECBFF;">&quot;exn.h&quot;</span></span>
+<span class="line"><span style="color:#F97583;">#include</span><span style="color:#E1E4E8;"> </span><span style="color:#9ECBFF;">&lt;setjmp.h&gt;</span></span>
+<span class="line"><span style="color:#F97583;">#include</span><span style="color:#E1E4E8;"> </span><span style="color:#9ECBFF;">&lt;stdlib.h&gt;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8;">exn_state exn_state_global </span><span style="color:#F97583;">=</span><span style="color:#E1E4E8;"> {</span></span>
+<span class="line"><span style="color:#E1E4E8;">    .limited </span><span style="color:#F97583;">=</span><span style="color:#E1E4E8;"> </span><span style="color:#79B8FF;">false</span><span style="color:#E1E4E8;">,</span></span>
+<span class="line"><span style="color:#E1E4E8;">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583;">void</span><span style="color:#E1E4E8;"> </span><span style="color:#B392F0;">throw</span><span style="color:#E1E4E8;">(</span><span style="color:#79B8FF;">exn_t</span><span style="color:#E1E4E8;"> </span><span style="color:#FFAB70;">exn</span><span style="color:#E1E4E8;">) {</span></span>
+<span class="line"><span style="color:#E1E4E8;">  </span><span style="color:#F97583;">if</span><span style="color:#E1E4E8;"> (</span><span style="color:#F97583;">!</span><span style="color:#E1E4E8;">exn_state_global.limited) {</span></span>
+<span class="line"><span style="color:#E1E4E8;">    </span><span style="color:#B392F0;">exit</span><span style="color:#E1E4E8;">(</span><span style="color:#79B8FF;">1</span><span style="color:#E1E4E8;">);</span></span>
+<span class="line"><span style="color:#E1E4E8;">  }</span></span>
+<span class="line"><span style="color:#E1E4E8;">  jmp_buf </span><span style="color:#F97583;">*</span><span style="color:#E1E4E8;">buf </span><span style="color:#F97583;">=</span><span style="color:#E1E4E8;"> exn_state_global.data.buf;</span></span>
+<span class="line"><span style="color:#E1E4E8;">  exn_state_global.data.exn </span><span style="color:#F97583;">=</span><span style="color:#E1E4E8;"> exn;</span></span>
+<span class="line"><span style="color:#E1E4E8;">  </span><span style="color:#B392F0;">longjmp</span><span style="color:#E1E4E8;">(</span><span style="color:#F97583;">*</span><span style="color:#E1E4E8;">buf, </span><span style="color:#79B8FF;">1</span><span style="color:#E1E4E8;">);</span></span>
+<span class="line"><span style="color:#E1E4E8;">}</span></span></code></pre><pre class="shiki github-light vp-code-light"><code><span class="line"><span style="color:#D73A49;">#include</span><span style="color:#24292E;"> </span><span style="color:#032F62;">&quot;exn.h&quot;</span></span>
+<span class="line"><span style="color:#D73A49;">#include</span><span style="color:#24292E;"> </span><span style="color:#032F62;">&lt;setjmp.h&gt;</span></span>
+<span class="line"><span style="color:#D73A49;">#include</span><span style="color:#24292E;"> </span><span style="color:#032F62;">&lt;stdlib.h&gt;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;">exn_state exn_state_global </span><span style="color:#D73A49;">=</span><span style="color:#24292E;"> {</span></span>
+<span class="line"><span style="color:#24292E;">    .limited </span><span style="color:#D73A49;">=</span><span style="color:#24292E;"> </span><span style="color:#005CC5;">false</span><span style="color:#24292E;">,</span></span>
+<span class="line"><span style="color:#24292E;">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;">void</span><span style="color:#24292E;"> </span><span style="color:#6F42C1;">throw</span><span style="color:#24292E;">(</span><span style="color:#005CC5;">exn_t</span><span style="color:#24292E;"> </span><span style="color:#E36209;">exn</span><span style="color:#24292E;">) {</span></span>
+<span class="line"><span style="color:#24292E;">  </span><span style="color:#D73A49;">if</span><span style="color:#24292E;"> (</span><span style="color:#D73A49;">!</span><span style="color:#24292E;">exn_state_global.limited) {</span></span>
+<span class="line"><span style="color:#24292E;">    </span><span style="color:#6F42C1;">exit</span><span style="color:#24292E;">(</span><span style="color:#005CC5;">1</span><span style="color:#24292E;">);</span></span>
+<span class="line"><span style="color:#24292E;">  }</span></span>
+<span class="line"><span style="color:#24292E;">  jmp_buf </span><span style="color:#D73A49;">*</span><span style="color:#24292E;">buf </span><span style="color:#D73A49;">=</span><span style="color:#24292E;"> exn_state_global.data.buf;</span></span>
+<span class="line"><span style="color:#24292E;">  exn_state_global.data.exn </span><span style="color:#D73A49;">=</span><span style="color:#24292E;"> exn;</span></span>
+<span class="line"><span style="color:#24292E;">  </span><span style="color:#6F42C1;">longjmp</span><span style="color:#24292E;">(</span><span style="color:#D73A49;">*</span><span style="color:#24292E;">buf, </span><span style="color:#005CC5;">1</span><span style="color:#24292E;">);</span></span>
+<span class="line"><span style="color:#24292E;">}</span></span></code></pre></div><p>使用很简单：</p><div class="language-c vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">c</span><pre class="shiki github-dark vp-code-dark"><code><span class="line"><span style="color:#F97583;">#include</span><span style="color:#E1E4E8;"> </span><span style="color:#9ECBFF;">&quot;exn.h&quot;</span></span>
+<span class="line"><span style="color:#F97583;">#include</span><span style="color:#E1E4E8;"> </span><span style="color:#9ECBFF;">&lt;stdio.h&gt;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583;">int</span><span style="color:#E1E4E8;"> </span><span style="color:#B392F0;">divide</span><span style="color:#E1E4E8;">(</span><span style="color:#F97583;">int</span><span style="color:#E1E4E8;"> </span><span style="color:#FFAB70;">num</span><span style="color:#E1E4E8;">, </span><span style="color:#F97583;">int</span><span style="color:#E1E4E8;"> </span><span style="color:#FFAB70;">den</span><span style="color:#E1E4E8;">) {</span></span>
+<span class="line"><span style="color:#E1E4E8;">  </span><span style="color:#F97583;">if</span><span style="color:#E1E4E8;"> (den </span><span style="color:#F97583;">==</span><span style="color:#E1E4E8;"> </span><span style="color:#79B8FF;">0</span><span style="color:#E1E4E8;">) {</span></span>
+<span class="line"><span style="color:#E1E4E8;">    </span><span style="color:#B392F0;">throw</span><span style="color:#E1E4E8;">((</span><span style="color:#79B8FF;">exn_t</span><span style="color:#E1E4E8;">){.id </span><span style="color:#F97583;">=</span><span style="color:#E1E4E8;"> </span><span style="color:#79B8FF;">1</span><span style="color:#E1E4E8;">, .name </span><span style="color:#F97583;">=</span><span style="color:#E1E4E8;"> </span><span style="color:#9ECBFF;">&quot;Divide by zero&quot;</span><span style="color:#E1E4E8;">});</span></span>
+<span class="line"><span style="color:#E1E4E8;">  }</span></span>
+<span class="line"><span style="color:#E1E4E8;">  </span><span style="color:#F97583;">return</span><span style="color:#E1E4E8;"> num </span><span style="color:#F97583;">/</span><span style="color:#E1E4E8;"> den;</span></span>
+<span class="line"><span style="color:#E1E4E8;">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583;">int</span><span style="color:#E1E4E8;"> </span><span style="color:#B392F0;">main</span><span style="color:#E1E4E8;">() {</span></span>
+<span class="line"><span style="color:#E1E4E8;">  TRY {</span></span>
+<span class="line"><span style="color:#E1E4E8;">    </span><span style="color:#B392F0;">printf</span><span style="color:#E1E4E8;">(</span><span style="color:#9ECBFF;">&quot;</span><span style="color:#79B8FF;">%d</span><span style="color:#9ECBFF;"> / </span><span style="color:#79B8FF;">%d</span><span style="color:#9ECBFF;"> = </span><span style="color:#79B8FF;">%d\n</span><span style="color:#9ECBFF;">&quot;</span><span style="color:#E1E4E8;">, </span><span style="color:#79B8FF;">3</span><span style="color:#E1E4E8;">, </span><span style="color:#79B8FF;">1</span><span style="color:#E1E4E8;">, </span><span style="color:#B392F0;">divide</span><span style="color:#E1E4E8;">(</span><span style="color:#79B8FF;">3</span><span style="color:#E1E4E8;">, </span><span style="color:#79B8FF;">1</span><span style="color:#E1E4E8;">));</span></span>
+<span class="line"><span style="color:#E1E4E8;">    </span><span style="color:#B392F0;">printf</span><span style="color:#E1E4E8;">(</span><span style="color:#9ECBFF;">&quot;</span><span style="color:#79B8FF;">%d</span><span style="color:#9ECBFF;"> / </span><span style="color:#79B8FF;">%d</span><span style="color:#9ECBFF;"> = </span><span style="color:#79B8FF;">%d\n</span><span style="color:#9ECBFF;">&quot;</span><span style="color:#E1E4E8;">, </span><span style="color:#79B8FF;">2</span><span style="color:#E1E4E8;">, </span><span style="color:#79B8FF;">0</span><span style="color:#E1E4E8;">, </span><span style="color:#B392F0;">divide</span><span style="color:#E1E4E8;">(</span><span style="color:#79B8FF;">2</span><span style="color:#E1E4E8;">, </span><span style="color:#79B8FF;">0</span><span style="color:#E1E4E8;">));</span></span>
+<span class="line"><span style="color:#E1E4E8;">    </span><span style="color:#B392F0;">printf</span><span style="color:#E1E4E8;">(</span><span style="color:#9ECBFF;">&quot;</span><span style="color:#79B8FF;">%d</span><span style="color:#9ECBFF;"> / </span><span style="color:#79B8FF;">%d</span><span style="color:#9ECBFF;"> = </span><span style="color:#79B8FF;">%d\n</span><span style="color:#9ECBFF;">&quot;</span><span style="color:#E1E4E8;">, </span><span style="color:#79B8FF;">1</span><span style="color:#E1E4E8;">, </span><span style="color:#79B8FF;">1</span><span style="color:#E1E4E8;">, </span><span style="color:#B392F0;">divide</span><span style="color:#E1E4E8;">(</span><span style="color:#79B8FF;">1</span><span style="color:#E1E4E8;">, </span><span style="color:#79B8FF;">1</span><span style="color:#E1E4E8;">));</span></span>
+<span class="line"><span style="color:#E1E4E8;">  }</span></span>
+<span class="line"><span style="color:#E1E4E8;">  </span><span style="color:#B392F0;">CATCH</span><span style="color:#E1E4E8;">(e) {</span></span>
+<span class="line"><span style="color:#E1E4E8;">    </span><span style="color:#B392F0;">printf</span><span style="color:#E1E4E8;">(</span><span style="color:#9ECBFF;">&quot;Error </span><span style="color:#79B8FF;">%d</span><span style="color:#9ECBFF;">: </span><span style="color:#79B8FF;">%s\n</span><span style="color:#9ECBFF;">&quot;</span><span style="color:#E1E4E8;">, e.id, e.name);</span></span>
+<span class="line"><span style="color:#E1E4E8;">  }</span></span>
+<span class="line"><span style="color:#E1E4E8;">  END_TRY;</span></span>
+<span class="line"><span style="color:#E1E4E8;">}</span></span></code></pre><pre class="shiki github-light vp-code-light"><code><span class="line"><span style="color:#D73A49;">#include</span><span style="color:#24292E;"> </span><span style="color:#032F62;">&quot;exn.h&quot;</span></span>
+<span class="line"><span style="color:#D73A49;">#include</span><span style="color:#24292E;"> </span><span style="color:#032F62;">&lt;stdio.h&gt;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;">int</span><span style="color:#24292E;"> </span><span style="color:#6F42C1;">divide</span><span style="color:#24292E;">(</span><span style="color:#D73A49;">int</span><span style="color:#24292E;"> </span><span style="color:#E36209;">num</span><span style="color:#24292E;">, </span><span style="color:#D73A49;">int</span><span style="color:#24292E;"> </span><span style="color:#E36209;">den</span><span style="color:#24292E;">) {</span></span>
+<span class="line"><span style="color:#24292E;">  </span><span style="color:#D73A49;">if</span><span style="color:#24292E;"> (den </span><span style="color:#D73A49;">==</span><span style="color:#24292E;"> </span><span style="color:#005CC5;">0</span><span style="color:#24292E;">) {</span></span>
+<span class="line"><span style="color:#24292E;">    </span><span style="color:#6F42C1;">throw</span><span style="color:#24292E;">((</span><span style="color:#005CC5;">exn_t</span><span style="color:#24292E;">){.id </span><span style="color:#D73A49;">=</span><span style="color:#24292E;"> </span><span style="color:#005CC5;">1</span><span style="color:#24292E;">, .name </span><span style="color:#D73A49;">=</span><span style="color:#24292E;"> </span><span style="color:#032F62;">&quot;Divide by zero&quot;</span><span style="color:#24292E;">});</span></span>
+<span class="line"><span style="color:#24292E;">  }</span></span>
+<span class="line"><span style="color:#24292E;">  </span><span style="color:#D73A49;">return</span><span style="color:#24292E;"> num </span><span style="color:#D73A49;">/</span><span style="color:#24292E;"> den;</span></span>
+<span class="line"><span style="color:#24292E;">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49;">int</span><span style="color:#24292E;"> </span><span style="color:#6F42C1;">main</span><span style="color:#24292E;">() {</span></span>
+<span class="line"><span style="color:#24292E;">  TRY {</span></span>
+<span class="line"><span style="color:#24292E;">    </span><span style="color:#6F42C1;">printf</span><span style="color:#24292E;">(</span><span style="color:#032F62;">&quot;</span><span style="color:#005CC5;">%d</span><span style="color:#032F62;"> / </span><span style="color:#005CC5;">%d</span><span style="color:#032F62;"> = </span><span style="color:#005CC5;">%d\n</span><span style="color:#032F62;">&quot;</span><span style="color:#24292E;">, </span><span style="color:#005CC5;">3</span><span style="color:#24292E;">, </span><span style="color:#005CC5;">1</span><span style="color:#24292E;">, </span><span style="color:#6F42C1;">divide</span><span style="color:#24292E;">(</span><span style="color:#005CC5;">3</span><span style="color:#24292E;">, </span><span style="color:#005CC5;">1</span><span style="color:#24292E;">));</span></span>
+<span class="line"><span style="color:#24292E;">    </span><span style="color:#6F42C1;">printf</span><span style="color:#24292E;">(</span><span style="color:#032F62;">&quot;</span><span style="color:#005CC5;">%d</span><span style="color:#032F62;"> / </span><span style="color:#005CC5;">%d</span><span style="color:#032F62;"> = </span><span style="color:#005CC5;">%d\n</span><span style="color:#032F62;">&quot;</span><span style="color:#24292E;">, </span><span style="color:#005CC5;">2</span><span style="color:#24292E;">, </span><span style="color:#005CC5;">0</span><span style="color:#24292E;">, </span><span style="color:#6F42C1;">divide</span><span style="color:#24292E;">(</span><span style="color:#005CC5;">2</span><span style="color:#24292E;">, </span><span style="color:#005CC5;">0</span><span style="color:#24292E;">));</span></span>
+<span class="line"><span style="color:#24292E;">    </span><span style="color:#6F42C1;">printf</span><span style="color:#24292E;">(</span><span style="color:#032F62;">&quot;</span><span style="color:#005CC5;">%d</span><span style="color:#032F62;"> / </span><span style="color:#005CC5;">%d</span><span style="color:#032F62;"> = </span><span style="color:#005CC5;">%d\n</span><span style="color:#032F62;">&quot;</span><span style="color:#24292E;">, </span><span style="color:#005CC5;">1</span><span style="color:#24292E;">, </span><span style="color:#005CC5;">1</span><span style="color:#24292E;">, </span><span style="color:#6F42C1;">divide</span><span style="color:#24292E;">(</span><span style="color:#005CC5;">1</span><span style="color:#24292E;">, </span><span style="color:#005CC5;">1</span><span style="color:#24292E;">));</span></span>
+<span class="line"><span style="color:#24292E;">  }</span></span>
+<span class="line"><span style="color:#24292E;">  </span><span style="color:#6F42C1;">CATCH</span><span style="color:#24292E;">(e) {</span></span>
+<span class="line"><span style="color:#24292E;">    </span><span style="color:#6F42C1;">printf</span><span style="color:#24292E;">(</span><span style="color:#032F62;">&quot;Error </span><span style="color:#005CC5;">%d</span><span style="color:#032F62;">: </span><span style="color:#005CC5;">%s\n</span><span style="color:#032F62;">&quot;</span><span style="color:#24292E;">, e.id, e.name);</span></span>
+<span class="line"><span style="color:#24292E;">  }</span></span>
+<span class="line"><span style="color:#24292E;">  END_TRY;</span></span>
+<span class="line"><span style="color:#24292E;">}</span></span></code></pre></div></div></div></main><!--]--></div>
+    <script>window.__VP_HASH_MAP__=JSON.parse("{\"about.md\":\"W5-7ZoM5\",\"blog_cssfont.md\":\"nKl9Wtej\",\"project_schdsc_updatelog.md\":\"cGLQk80Q\",\"project_schdsc_wiki.md\":\"hJHo9o1y\",\"blog_cssgrid.md\":\"DY5N8mEc\",\"blog_justnotepad.md\":\"UFFCwfLI\",\"blog_reflect.md\":\"_Q1iV2ZP\",\"project_scmidi.md\":\"v8krNr4G\",\"blog_ji.md\":\"V63bPBiQ\",\"blog_unicode.md\":\"uQTzxIXe\",\"blog_wechatlink.md\":\"wdnX8CwV\",\"blog_rustlink.md\":\"xk-fjbME\",\"blog_fenix.md\":\"9AHl7unF\",\"blog_webcodecs.md\":\"D8UTMeho\",\"index.md\":\"MxsRVgdD\",\"project_schdsc_index.md\":\"yoODS0jr\",\"project_index.md\":\"Tw0Q6-ZF\",\"project_schdsc_introduction.md\":\"00BES_pP\",\"project_schdsc_poster_0-9-0.md\":\"yLuR5tWH\",\"blog_index.md\":\"J6NEQmE2\",\"blog_tryinc.md\":\"Xb1In5kQ\",\"blog_jqunwrapinner.md\":\"C8uB0Iwj\",\"blog_jsonstringify.md\":\"wtd-bgL2\",\"blog_rustleetcode65.md\":\"J1F4XN_9\",\"blog_jsforof.md\":\"t5Cjh8Yg\",\"blog_curry.md\":\"AT5f_s7y\",\"blog_rectarea.md\":\"seFfNY7U\",\"blog_open.md\":\"64FxDpNt\",\"blog_xizaoguilun.md\":\"l6Nvj3m8\",\"blog_userliteral.md\":\"Llh7z5R1\",\"blog_variable.md\":\"CiHTzMkD\"}");window.__VP_SITE_DATA__=JSON.parse("{\"lang\":\"zh-CN\",\"dir\":\"ltr\",\"title\":\"ZengYL 的个人主页\",\"description\":\"A VitePress site\",\"base\":\"/\",\"head\":[],\"router\":{\"prefetchLinks\":true},\"appearance\":true,\"themeConfig\":{},\"locales\":{},\"scrollOffset\":90,\"cleanUrls\":false}");</script>
+    
+  </body>
+</html>
