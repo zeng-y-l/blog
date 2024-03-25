@@ -6,13 +6,13 @@
     <title>C 实现 try | ZengYL 的个人主页</title>
     <meta name="description" content="A VitePress site">
     <meta name="generator" content="VitePress v1.0.0-rc.28">
-    <link rel="preload stylesheet" href="/assets/style.Ppr7V17M.css" as="style">
+    <link rel="preload stylesheet" href="/assets/style.4a3OAFjY.css" as="style">
     
-    <script type="module" src="/assets/app.5Hd-ioZC.js"></script>
-    <link rel="modulepreload" href="/assets/chunks/framework.48Co6iSO.js">
-    <link rel="modulepreload" href="/assets/chunks/main.module.Mi1Y6S1n.js">
+    <script type="module" src="/assets/app.3XIeA7Ez.js"></script>
+    <link rel="modulepreload" href="/assets/chunks/framework.n-gslYO9.js">
+    <link rel="modulepreload" href="/assets/chunks/main.module.CZtdWaki.js">
     <link rel="modulepreload" href="/assets/chunks/utils.c3f49hEE.js">
-    <link rel="modulepreload" href="/assets/blog_tryinc.md.Xb1In5kQ.lean.js">
+    <link rel="modulepreload" href="/assets/blog_tryinc.md.CRanEI60.lean.js">
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="alternate" href="/feed.xml" type="application/atom+xml">
     <link rel="preconnect" href="https://rsms.me/">
@@ -21,7 +21,7 @@
     <script id="check-mac-os">document.documentElement.classList.toggle("mac",/Mac|iPhone|iPod|iPad/i.test(navigator.platform));</script>
   </head>
   <body>
-    <div id="app"><!--[--><nav class="_wrapper_nh36t_1"><a href="/"><img class="_icon_nh36t_6" src="/icon.png"></a><div class="_path_nh36t_12"><!--[--><!--[--><span class="_sep_nh36t_20">/</span><a href="/blog/">blog</a><!--]--><!--]--><span class="_sep_nh36t_20">/</span><span>tryinc.html</span><!----></div></nav><header class="_header_xfp05_1"><h1 class="_title_xfp05_14">C 实现 try</h1><!--[--><div class="_info_xfp05_17">创建于 3/23/2024</div><!--]--><p class="_info_xfp05_17 italic">longjmp 实现异常处理</p></header><main class="_main_felib_1"><div style="position:relative;"><div><h1>C 实现 try</h1><p>随手用 C 写了个异常处理的小玩意儿。使用 <code>setjmp</code> <code>longjmp</code>， 支持嵌套 try、重复抛出。</p><p><code>exn.h</code>：</p><div class="language-c vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">c</span><pre class="shiki github-dark vp-code-dark"><code><span class="line"><span style="color:#F97583;">#ifndef</span><span style="color:#E1E4E8;"> </span><span style="color:#B392F0;">EXN_H</span></span>
+    <div id="app"><!--[--><nav class="_wrapper_nh36t_1"><a href="/"><img class="_icon_nh36t_6" src="/icon.png"></a><div class="_path_nh36t_12"><!--[--><!--[--><span class="_sep_nh36t_20">/</span><a href="/blog/">blog</a><!--]--><!--]--><span class="_sep_nh36t_20">/</span><span>tryinc.html</span><!----></div></nav><header class="_header_1fvfa_1"><h1 class="_title_1fvfa_16">C 实现 try</h1><!--[--><div class="_info_1fvfa_19">创建于 3/23/2024</div><!--]--><p class="_info_1fvfa_19 italic">longjmp 实现异常处理</p></header><main class="_main_felib_1"><div style="position:relative;"><div><h1>C 实现 try</h1><p>随手用 C 写了个异常处理的小玩意儿。使用 <code>setjmp</code> <code>longjmp</code>， 支持嵌套 try、重复抛出。</p><p><code>exn.h</code>：</p><div class="language-c vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">c</span><pre class="shiki github-dark vp-code-dark"><code><span class="line"><span style="color:#F97583;">#ifndef</span><span style="color:#E1E4E8;"> </span><span style="color:#B392F0;">EXN_H</span></span>
 <span class="line"><span style="color:#F97583;">#define</span><span style="color:#E1E4E8;"> </span><span style="color:#B392F0;">EXN_H</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#F97583;">#include</span><span style="color:#E1E4E8;"> </span><span style="color:#9ECBFF;">&lt;setjmp.h&gt;</span></span>
@@ -174,7 +174,7 @@
 <span class="line"><span style="color:#24292E;">  }</span></span>
 <span class="line"><span style="color:#24292E;">  END_TRY;</span></span>
 <span class="line"><span style="color:#24292E;">}</span></span></code></pre></div></div></div></main><!--]--></div>
-    <script>window.__VP_HASH_MAP__=JSON.parse("{\"about.md\":\"W5-7ZoM5\",\"blog_cssfont.md\":\"nKl9Wtej\",\"project_schdsc_updatelog.md\":\"cGLQk80Q\",\"project_schdsc_wiki.md\":\"hJHo9o1y\",\"blog_cssgrid.md\":\"DY5N8mEc\",\"blog_justnotepad.md\":\"UFFCwfLI\",\"blog_reflect.md\":\"_Q1iV2ZP\",\"project_scmidi.md\":\"v8krNr4G\",\"blog_ji.md\":\"V63bPBiQ\",\"blog_unicode.md\":\"uQTzxIXe\",\"blog_wechatlink.md\":\"wdnX8CwV\",\"blog_rustlink.md\":\"xk-fjbME\",\"blog_fenix.md\":\"9AHl7unF\",\"blog_webcodecs.md\":\"D8UTMeho\",\"index.md\":\"MxsRVgdD\",\"project_schdsc_index.md\":\"yoODS0jr\",\"project_index.md\":\"Tw0Q6-ZF\",\"project_schdsc_introduction.md\":\"00BES_pP\",\"project_schdsc_poster_0-9-0.md\":\"yLuR5tWH\",\"blog_index.md\":\"J6NEQmE2\",\"blog_tryinc.md\":\"Xb1In5kQ\",\"blog_jqunwrapinner.md\":\"C8uB0Iwj\",\"blog_jsonstringify.md\":\"wtd-bgL2\",\"blog_rustleetcode65.md\":\"J1F4XN_9\",\"blog_jsforof.md\":\"t5Cjh8Yg\",\"blog_curry.md\":\"AT5f_s7y\",\"blog_rectarea.md\":\"seFfNY7U\",\"blog_open.md\":\"64FxDpNt\",\"blog_xizaoguilun.md\":\"l6Nvj3m8\",\"blog_userliteral.md\":\"Llh7z5R1\",\"blog_variable.md\":\"CiHTzMkD\"}");window.__VP_SITE_DATA__=JSON.parse("{\"lang\":\"zh-CN\",\"dir\":\"ltr\",\"title\":\"ZengYL 的个人主页\",\"description\":\"A VitePress site\",\"base\":\"/\",\"head\":[],\"router\":{\"prefetchLinks\":true},\"appearance\":true,\"themeConfig\":{},\"locales\":{},\"scrollOffset\":90,\"cleanUrls\":false}");</script>
+    <script>window.__VP_HASH_MAP__=JSON.parse("{\"blog_variable.md\":\"F-dkuD60\",\"blog_rustlink.md\":\"_0wuF-7A\",\"blog_rectarea.md\":\"pg89s1Vg\",\"blog_jsforof.md\":\"xzJIhh6v\",\"project_schdsc_wiki.md\":\"1pE6REQf\",\"blog_unicode.md\":\"pIVCGiv2\",\"blog_cssgrid.md\":\"5kK1LHWu\",\"about.md\":\"uwhoMQAs\",\"blog_wechatlink.md\":\"nccLT6FY\",\"blog_tryinc.md\":\"CRanEI60\",\"blog_userliteral.md\":\"1Ff8ZwKv\",\"blog_webcodecs.md\":\"n0O5NRa_\",\"project_index.md\":\"orIn5KGn\",\"blog_justnotepad.md\":\"sAhUpfMU\",\"project_schdsc_index.md\":\"lEHd4prl\",\"project_schdsc_introduction.md\":\"cNQC334X\",\"project_schdsc_poster_0-9-0.md\":\"2SmDBjaV\",\"project_scmidi.md\":\"TTp2XG3s\",\"project_schdsc_updatelog.md\":\"OsvyUMLR\",\"index.md\":\"wd2cz2pQ\",\"blog_jqunwrapinner.md\":\"f-w4aI-C\",\"blog_jsonstringify.md\":\"W0sPKuY-\",\"blog_open.md\":\"ChNS4Sxd\",\"blog_reflect.md\":\"nmJUmvU3\",\"blog_cssfont.md\":\"sws0i9i2\",\"blog_index.md\":\"L1ka5m_6\",\"blog_ji.md\":\"PNhYu6nP\",\"blog_fenix.md\":\"rqKo-4Ng\",\"blog_xizaoguilun.md\":\"SGEaqQM3\",\"blog_curry.md\":\"S6Z-dgSx\",\"blog_rustleetcode65.md\":\"KrPmNz9Z\",\"project_bf2wasm.md\":\"IuiyVLHx\"}");window.__VP_SITE_DATA__=JSON.parse("{\"lang\":\"zh-CN\",\"dir\":\"ltr\",\"title\":\"ZengYL 的个人主页\",\"description\":\"A VitePress site\",\"base\":\"/\",\"head\":[],\"router\":{\"prefetchLinks\":true},\"appearance\":true,\"themeConfig\":{},\"locales\":{},\"scrollOffset\":90,\"cleanUrls\":false}");</script>
     
   </body>
 </html>
