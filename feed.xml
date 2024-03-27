@@ -2,11 +2,19 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zeng-y-l.github.io</id>
     <title>ZengYL 的个人主页</title>
-    <updated>2024-03-25T04:58:15.272Z</updated>
+    <updated>2024-03-27T08:39:56.869Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zeng-y-l.github.io"/>
     <icon>/icon.png</icon>
     <rights>Copyright 2023 ZengYL</rights>
+    <entry>
+        <title type="html"><![CDATA[编写「bf2wasm」]]></title>
+        <id>/blog/bf2wasm.html</id>
+        <link href="/blog/bf2wasm.html"/>
+        <updated>2024-03-26T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[开发中用到的技术]]></summary>
+        <published>2024-03-26T00:00:00.000Z</published>
+    </entry>
     <entry>
         <title type="html"><![CDATA[C 实现 try]]></title>
         <id>/blog/tryinc.html</id>
