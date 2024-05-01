@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>小狼毫监控程序 | ZengYL 的个人主页</title>
+    <meta name="description" content="A VitePress site">
+    <meta name="generator" content="VitePress v1.1.4">
+    <link rel="preload stylesheet" href="/assets/style.DSJnq6ak.css" as="style">
+    
+    <script type="module" src="/assets/app.DbeYiX98.js"></script>
+    <link rel="modulepreload" href="/assets/chunks/framework.3sTsjlXn.js">
+    <link rel="modulepreload" href="/assets/chunks/theme.g8_sPpcY.js">
+    <link rel="modulepreload" href="/assets/blog_weasel.md.EAMRBaMU.lean.js">
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="alternate" href="/feed.xml" type="application/atom+xml">
+    <link rel="preconnect" href="https://rsms.me/">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <script id="check-dark-mode">(()=>{const e=localStorage.getItem("vitepress-theme-appearance")||"auto",a=window.matchMedia("(prefers-color-scheme: dark)").matches;(!e||e==="auto"?a:e==="dark")&&document.documentElement.classList.add("dark")})();</script>
+    <script id="check-mac-os">document.documentElement.classList.toggle("mac",/Mac|iPhone|iPod|iPad/i.test(navigator.platform));</script>
+  </head>
+  <body>
+    <div id="app"><!--[--><nav class="_wrapper_nh36t_1"><a href="/"><img class="_icon_nh36t_6" src="/icon.png"></a><div class="_path_nh36t_12"><!--[--><!--[--><span class="_sep_nh36t_20">/</span><a href="/blog/">blog</a><!--]--><!--]--><span class="_sep_nh36t_20">/</span><span>weasel.html</span><!----></div></nav><header class="_header_1fvfa_1"><h1 class="_title_1fvfa_16">小狼毫监控程序</h1><!--[--><div class="_info_1fvfa_19">创建于 5/1/2024</div><!--]--><p class="_info_1fvfa_19 italic">用 AHK 自动重启小狼毫</p></header><main class="_main_1d91h_1"><div style="position:relative;"><div><p>用 <a href="https://rime.im/" target="_blank" rel="noreferrer">RIME</a> 输入法，Windows 上即<strong>小狼毫</strong>。它有个大问题：经常莫名其妙就退出了，打字打不了，只好重新打开。</p><p>手动重启很麻烦，我不堪其扰，于是前几天写了个 <a href="https://www.autohotkey.com/" target="_blank" rel="noreferrer">AutoHotkey</a> 脚本，用于自动重启。每隔半秒判断（避免占用过多 CPU）小狼毫是否退出，若退出则重启并提示。重启后等两秒，若又退出则弹窗报错。</p><p>脚本如下。右键托盘图标可得<em>程序文件夹</em>。</p><div class="language-autohotkey vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">autohotkey</span><pre class="shiki shiki-themes github-light github-dark vp-code"><code><span class="line"><span>loop {</span></span>
+<span class="line"><span>    Sleep 500</span></span>
+<span class="line"><span>    if ProcessExist(&quot;WeaselServer.exe&quot;) == 0 {</span></span>
+<span class="line"><span>        Run &quot;程序文件夹\WeaselServer.exe&quot;</span></span>
+<span class="line"><span>        TrayTip &quot;已重启小狼毫&quot;</span></span>
+<span class="line"><span>        Sleep 2000</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>        if ProcessExist(&quot;WeaselServer.exe&quot;) == 0 {</span></span>
+<span class="line"><span>            MsgBox &quot;小狼毫重启失败&quot;</span></span>
+<span class="line"><span>        }</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span>}</span></span></code></pre></div></div></div></main><!--]--></div>
+    <script>window.__VP_HASH_MAP__=JSON.parse("{\"blog_wechatlink.md\":\"B-UM8qZb\",\"blog_rectarea.md\":\"DzYnmKNs\",\"blog_jsforof.md\":\"BfUVLPut\",\"project_index.md\":\"DBd0uQ8T\",\"project_scmidi.md\":\"DOvY0u_b\",\"blog_webcodecs.md\":\"JvqfCa-m\",\"blog_justnotepad.md\":\"CzUaVOb5\",\"blog_tryinc.md\":\"D1DJATIq\",\"blog_cssgrid.md\":\"BpCY7eUh\",\"blog_reflect.md\":\"BzYR-KBW\",\"blog_ji.md\":\"pyDp-aKP\",\"blog_open.md\":\"Bjmx37UI\",\"about.md\":\"Sl2eT8Zn\",\"project_schdsc_wiki.md\":\"DbhVJweM\",\"blog_index.md\":\"CdhC_Q7T\",\"blog_rustleetcode65.md\":\"BVJXLnuf\",\"blog_bf2wasm.md\":\"CZmrBUfc\",\"project_schdsc_index.md\":\"djEyVYbE\",\"project_schdsc_updatelog.md\":\"DgVb4PI7\",\"blog_jqunwrapinner.md\":\"CqJY5nEX\",\"project_schdsc_introduction.md\":\"CgyF1vgm\",\"blog_userliteral.md\":\"B1YcwiYR\",\"project_schdsc_poster_0-9-0.md\":\"BFvdadTv\",\"blog_fenix.md\":\"Cmv7Oidy\",\"blog_weasel.md\":\"EAMRBaMU\",\"blog_rustlink.md\":\"BX7VbF2y\",\"blog_jsonstringify.md\":\"CTGaT3vl\",\"index.md\":\"BiqduGtn\",\"blog_xizaoguilun.md\":\"Bvp-ojdt\",\"blog_unicode.md\":\"B1payn0l\",\"blog_cssfont.md\":\"B5Ye6PGg\",\"blog_pinyin.md\":\"GIpmtbJX\",\"blog_variable.md\":\"COANLcqQ\",\"blog_curry.md\":\"CnnmFgx7\",\"project_bf2wasm.md\":\"BMSw_GII\"}");window.__VP_SITE_DATA__=JSON.parse("{\"lang\":\"zh-CN\",\"dir\":\"ltr\",\"title\":\"ZengYL 的个人主页\",\"description\":\"A VitePress site\",\"base\":\"/\",\"head\":[],\"router\":{\"prefetchLinks\":true},\"appearance\":true,\"themeConfig\":{},\"locales\":{},\"scrollOffset\":134,\"cleanUrls\":false}");</script>
+    
+  </body>
+</html>
