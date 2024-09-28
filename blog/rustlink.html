@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Rust 写不了链表？ | ZengYL 的个人主页</title>
     <meta name="description" content="A VitePress site">
-    <meta name="generator" content="VitePress v1.3.2">
-    <link rel="preload stylesheet" href="/assets/style.CkVadoul.css" as="style">
+    <meta name="generator" content="VitePress v1.3.4">
+    <link rel="preload stylesheet" href="/assets/style.Dm60NVzs.css" as="style">
     
-    <script type="module" src="/assets/app.BHSQdhFt.js"></script>
-    <link rel="modulepreload" href="/assets/chunks/theme.DMFz-7rn.js">
-    <link rel="modulepreload" href="/assets/chunks/framework.BkowTDBq.js">
-    <link rel="modulepreload" href="/assets/blog_rustlink.md.Bi80FSOg.lean.js">
+    <script type="module" src="/assets/app.BAAtloou.js"></script>
+    <link rel="modulepreload" href="/assets/chunks/theme.OUrTHuBT.js">
+    <link rel="modulepreload" href="/assets/chunks/framework.Au3dSO0I.js">
+    <link rel="modulepreload" href="/assets/blog_rustlink.md.C9qJkGxk.lean.js">
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="alternate" href="/feed.xml" type="application/atom+xml">
     <link rel="preconnect" href="https://rsms.me/">
@@ -21,7 +21,7 @@
   </head>
   <body>
     <div id="app"><!--[--><nav class="_wrapper_nh36t_1"><a href="/"><img class="_icon_nh36t_6" src="/icon.png"></a><div class="_path_nh36t_12"><!--[--><!--[--><span class="_sep_nh36t_20">/</span><a href="/blog/">blog</a><!--]--><!--]--><span class="_sep_nh36t_20">/</span><span>rustlink.html</span><!----></div></nav><header class="_header_1fvfa_1"><h1 class="_title_1fvfa_16">Rust 写不了链表？</h1><!--[--><div class="_info_1fvfa_19">创建于 11/20/2023</div><!--]--><p class="_info_1fvfa_19 italic">不仅如此……</p></header><main class="_main_13727_1"><div style="position:relative;"><div><p>常常有人说：Rust 写不了链表。严谨地说，写不了安全、零开销的双链表。</p><p>无可辩驳，这是对的。不仅如此，<code>Vec</code> 等容器也无法写得安全、零开销。它们都需要更精细地控制内存。</p><p>不过，惊<ruby>喜<rt>xià</rt></ruby>还有更多。有的东西看着如同库函数，实则是编译器开洞。自己即便用了 <code>unsafe</code>，也写不了！</p><p>解引用 <code>Box</code> 可以移出其中的值。而 <code>DerefMove</code> trait 尚不存在，自己写不了。</p><p><code>UnsafeCell</code> 允许从不可变引用中获取可变引用。如果不使用它，那就是未定义行为，即便保证不同时访问也一样。</p><p>如此之类，应该还有很多。我也不懂，读者可自行寻找。</p></div></div></main><!--]--></div>
-    <script>window.__VP_HASH_MAP__=JSON.parse("{\"about.md\":\"DFWvBCsP\",\"blog_bf2wasm.md\":\"BMXqB3Nh\",\"blog_bisapowerof10.md\":\"UM82lNnH\",\"blog_cssfont.md\":\"DwKOz7JM\",\"blog_cssgrid.md\":\"bCSqXNbi\",\"blog_curry.md\":\"CqijIZQB\",\"blog_fenix.md\":\"Brt46Vsy\",\"blog_index.md\":\"BZC2Cyns\",\"blog_ji.md\":\"Cb48KCf0\",\"blog_jqunwrapinner.md\":\"I6vd6yLi\",\"blog_jsforof.md\":\"BSzMZ5Gn\",\"blog_jsonstringify.md\":\"D4vucTFP\",\"blog_justnotepad.md\":\"BhMb9_zI\",\"blog_open.md\":\"C-lX1YYo\",\"blog_pinyin.md\":\"iAoBbvkv\",\"blog_rectarea.md\":\"D4cK2FkE\",\"blog_reflect.md\":\"BMDPbzVE\",\"blog_rustleetcode65.md\":\"DbJiZeH3\",\"blog_rustlink.md\":\"Bi80FSOg\",\"blog_tryinc.md\":\"D6q2U1Vp\",\"blog_tygfhzb.md\":\"Cw7hl0Iy\",\"blog_unicode.md\":\"Bv4N80vb\",\"blog_userliteral.md\":\"DoL3mVfn\",\"blog_variable.md\":\"J9hMAYFi\",\"blog_weasel.md\":\"Bdytbm9K\",\"blog_webcodecs.md\":\"DesyQF8s\",\"blog_wechatlink.md\":\"BU79_vOx\",\"blog_xizaoguilun.md\":\"D86Hqtqb\",\"index.md\":\"m2N11Tq3\",\"project_baseany.md\":\"LtMV54Rn\",\"project_bf2wasm.md\":\"DOqVNHcM\",\"project_index.md\":\"Cm1RkIOR\",\"project_schdsc_index.md\":\"BtFEVRwe\",\"project_schdsc_introduction.md\":\"DUms9Paz\",\"project_schdsc_poster_0-9-0.md\":\"BcS9nV0E\",\"project_schdsc_updatelog.md\":\"UyfS5rai\",\"project_schdsc_wiki.md\":\"EjwzjmCb\",\"project_scmidi.md\":\"C2eFcDVB\"}");window.__VP_SITE_DATA__=JSON.parse("{\"lang\":\"zh-CN\",\"dir\":\"ltr\",\"title\":\"ZengYL 的个人主页\",\"description\":\"A VitePress site\",\"base\":\"/\",\"head\":[],\"router\":{\"prefetchLinks\":true},\"appearance\":true,\"themeConfig\":{},\"locales\":{},\"scrollOffset\":134,\"cleanUrls\":false}");</script>
+    <script>window.__VP_HASH_MAP__=JSON.parse("{\"about.md\":\"SR4As8QG\",\"blog_bf2wasm.md\":\"CPbs_7Rd\",\"blog_bisapowerof10.md\":\"Qdmo5i_H\",\"blog_cssfont.md\":\"CD3FBWXf\",\"blog_cssgrid.md\":\"CwweaEIS\",\"blog_curry.md\":\"D0Ol4bTo\",\"blog_fenix.md\":\"C3ezOhdO\",\"blog_index.md\":\"Br4tWVwm\",\"blog_ji.md\":\"CQjRFZZ-\",\"blog_jqunwrapinner.md\":\"0KSQq-YI\",\"blog_jsforof.md\":\"DbYxE7Kn\",\"blog_jsonstringify.md\":\"-N_-mBi3\",\"blog_justnotepad.md\":\"CyUpyV1m\",\"blog_open.md\":\"CkFrJKrN\",\"blog_pinyin.md\":\"Z2_VWVKN\",\"blog_rectarea.md\":\"D8m6fX5X\",\"blog_reflect.md\":\"5t6UreaU\",\"blog_rustleetcode65.md\":\"B6HIWucP\",\"blog_rustlink.md\":\"C9qJkGxk\",\"blog_tryinc.md\":\"CRyUeYmQ\",\"blog_tygfhzb.md\":\"BSIvrYSm\",\"blog_unicode.md\":\"BPyoARAt\",\"blog_userliteral.md\":\"C3ltX2PK\",\"blog_variable.md\":\"DJYoKz0l\",\"blog_weasel.md\":\"BWg90T7Q\",\"blog_webcodecs.md\":\"BdxsrG8C\",\"blog_wechatlink.md\":\"iiOD6yFk\",\"blog_xizaoguilun.md\":\"C-AZmqK4\",\"index.md\":\"CrXnOSrb\",\"project_baseany.md\":\"V2oqU1tY\",\"project_bf2wasm.md\":\"Ch9yLW_n\",\"project_index.md\":\"CG4pzWZF\",\"project_schdsc_index.md\":\"CQ0M7HMp\",\"project_schdsc_introduction.md\":\"DoQXQgeG\",\"project_schdsc_poster_0-9-0.md\":\"DePobzYh\",\"project_schdsc_updatelog.md\":\"yNgrmK01\",\"project_schdsc_wiki.md\":\"UrErch5L\",\"project_scmidi.md\":\"D6IK4smY\"}");window.__VP_SITE_DATA__=JSON.parse("{\"lang\":\"zh-CN\",\"dir\":\"ltr\",\"title\":\"ZengYL 的个人主页\",\"description\":\"A VitePress site\",\"base\":\"/\",\"head\":[],\"router\":{\"prefetchLinks\":true},\"appearance\":true,\"themeConfig\":{},\"locales\":{},\"scrollOffset\":134,\"cleanUrls\":false}");</script>
     
   </body>
 </html>
