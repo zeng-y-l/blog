@@ -2,11 +2,19 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zeng-y-l.github.io</id>
     <title>ZengYL 的个人主页</title>
-    <updated>2024-09-28T04:26:40.292Z</updated>
+    <updated>2024-09-30T13:23:01.641Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zeng-y-l.github.io"/>
     <icon>/icon.png</icon>
     <rights>Copyright 2023 ZengYL</rights>
+    <entry>
+        <title type="html"><![CDATA[Rust 前端初尝试]]></title>
+        <id>/blog/baseany.html</id>
+        <link href="/blog/baseany.html"/>
+        <updated>2024-09-30T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[源神，启动！]]></summary>
+        <published>2024-09-30T00:00:00.000Z</published>
+    </entry>
     <entry>
         <title type="html"><![CDATA[通用规范汉字表]]></title>
         <id>/blog/tygfhzb.html</id>
