@@ -2,11 +2,19 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zeng-y-l.github.io</id>
     <title>ZengYL 的个人主页</title>
-    <updated>2024-12-05T10:42:52.413Z</updated>
+    <updated>2024-12-11T14:35:28.796Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zeng-y-l.github.io"/>
     <icon>/icon.png</icon>
     <rights>Copyright 2023 ZengYL</rights>
+    <entry>
+        <title type="html"><![CDATA[汉语拼音 FAQ]]></title>
+        <id>/blog/pinyin.html</id>
+        <link href="/blog/pinyin.html"/>
+        <updated>2024-12-11T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[普通人对汉语拼音可能有的疑问]]></summary>
+        <published>2024-03-31T00:00:00.000Z</published>
+    </entry>
     <entry>
         <title type="html"><![CDATA[写个真的万年历]]></title>
         <id>/blog/wannianli.html</id>
@@ -86,14 +94,6 @@
         <updated>2024-05-01T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[用 AHK 自动重启小狼毫]]></summary>
         <published>2024-05-01T00:00:00.000Z</published>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[汉语拼音 FAQ]]></title>
-        <id>/blog/pinyin.html</id>
-        <link href="/blog/pinyin.html"/>
-        <updated>2024-03-31T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[普通人对汉语拼音可能有的疑问]]></summary>
-        <published>2024-03-31T00:00:00.000Z</published>
     </entry>
     <entry>
         <title type="html"><![CDATA[编写「bf2wasm」]]></title>
