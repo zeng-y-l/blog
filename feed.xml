@@ -2,11 +2,19 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zeng-y-l.github.io</id>
     <title>ZengYL 的个人主页</title>
-    <updated>2024-12-29T15:41:22.101Z</updated>
+    <updated>2025-01-02T17:05:05.803Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zeng-y-l.github.io"/>
     <icon>/icon.png</icon>
     <rights>Copyright 2023 ZengYL</rights>
+    <entry>
+        <title type="html"><![CDATA[JS 比 C++ 快]]></title>
+        <id>/blog/rope.html</id>
+        <link href="/blog/rope.html"/>
+        <updated>2025-01-02T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[神奇的 Rope 结构]]></summary>
+        <published>2025-01-02T00:00:00.000Z</published>
+    </entry>
     <entry>
         <title type="html"><![CDATA[什么是函数式编程]]></title>
         <id>/blog/fp.html</id>
