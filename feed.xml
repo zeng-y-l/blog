@@ -2,11 +2,19 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zeng-y-l.github.io</id>
     <title>ZengYL 的个人主页</title>
-    <updated>2025-01-17T16:40:19.773Z</updated>
+    <updated>2025-01-18T08:43:59.607Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zeng-y-l.github.io"/>
     <icon>/icon.png</icon>
     <rights>Copyright 2023 ZengYL</rights>
+    <entry>
+        <title type="html"><![CDATA[浮点数性质测试]]></title>
+        <id>/blog/numtest.html</id>
+        <link href="/blog/numtest.html"/>
+        <updated>2025-01-18T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[随机生成数据，测试浮点数的性质]]></summary>
+        <published>2025-01-18T00:00:00.000Z</published>
+    </entry>
     <entry>
         <title type="html"><![CDATA[JS 比 C++ 快]]></title>
         <id>/blog/rope.html</id>
